@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build & node deploy.js"
+    "deploy": "npm run build & node deploy.mjs"
   },
   "dependencies": {
     "@types/node": "18.15.11",
