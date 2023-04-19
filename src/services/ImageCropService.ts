@@ -63,11 +63,7 @@ export class ImageCropService {
 
     const alphas: Record<number, boolean> = {};
 
-    const isValidAlpha = (x: number, y: number) => {
-      const alpha = data[(y * canvas.width + x) * 4 + 3];
-      alphas[alpha] = alpha <= alphaLimit;
-      return alpha <= alphaLimit;
-    };
+    const isValidAlpha = (x: number, y: number) => data[(y * canvas.width + x) * 4 + 3] <= alphaLimit;
 
     const getTopLimit = () => {
       for (let y = 0; y < canvas.height; y++) {
