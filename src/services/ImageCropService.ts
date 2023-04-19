@@ -3,9 +3,16 @@ import { drawHollowRect } from "@/utils/canvas.util";
 
 export class ImageCropService {
   private canvas: Record<"original" | "crop", HTMLCanvasElement> | null = null;
+  private ctx: Record<"original" | "crop", CanvasRenderingContext2D> | null = null;
 
-  public bind(canvas: typeof this.canvas) {
+  public bind(canvas: NonNullable<typeof this.canvas>) {
     this.canvas = canvas;
+    this.ctx = {
+      original: canvas.original.getContext("2d", { willReadFrequently: true })!,
+      crop: canvas.crop.getContext("2d", { willReadFrequently: true })!,
+    };
+
+    return this;
   }
 
   public render(
@@ -15,32 +22,26 @@ export class ImageCropService {
       color?: string | CanvasGradient | CanvasPattern;
     } = {}
   ) {
-    if (!this.canvas) return;
-
-    const ctx = {
-      original: this.canvas.original.getContext("2d"),
-      crop: this.canvas.crop.getContext("2d"),
-    };
-    if (!ctx.original || !ctx.crop) return;
+    if (!this.canvas || !this.ctx) return;
 
     const { image } = imageFile;
 
     this.canvas.original.width = image.width;
     this.canvas.original.height = image.height;
 
-    ctx.original.clearRect(0, 0, this.canvas.original.width, this.canvas.original.height);
-    ctx.original.drawImage(image, 0, 0);
+    this.ctx.original.clearRect(0, 0, this.canvas.original.width, this.canvas.original.height);
+    this.ctx.original.drawImage(image, 0, 0);
 
-    const cropLimits = this.getCropLimits(ctx.original, ((settings.alphaLimit || 0) * 255) / 100);
+    const cropLimits = this.getCropLimits(this.ctx.original, ((settings.alphaLimit || 0) * 255) / 100);
 
-    ctx.original.fillStyle = settings.color || "#ff0000";
-    drawHollowRect(ctx.original, cropLimits);
+    this.ctx.original.fillStyle = settings.color || "#ff0000";
+    drawHollowRect(this.ctx.original, cropLimits);
 
     this.canvas.crop.width = cropLimits.right - cropLimits.left;
     this.canvas.crop.height = cropLimits.bottom - cropLimits.top;
 
-    ctx.crop.clearRect(0, 0, this.canvas.crop.width, this.canvas.crop.height);
-    ctx.crop.drawImage(
+    this.ctx.crop.clearRect(0, 0, this.canvas.crop.width, this.canvas.crop.height);
+    this.ctx.crop.drawImage(
       image,
       cropLimits.left,
       cropLimits.top,
