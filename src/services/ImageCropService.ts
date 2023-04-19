@@ -61,8 +61,6 @@ export class ImageCropService {
     const canvas = ctx.canvas;
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-    const alphas: Record<number, boolean> = {};
-
     const isValidAlpha = (x: number, y: number) => data[(y * canvas.width + x) * 4 + 3] <= alphaLimit;
 
     const getTopLimit = () => {
@@ -109,8 +107,6 @@ export class ImageCropService {
     const right = getRightLimit(top);
     const bottom = getBottomLimit(right);
     const left = getLeftLimit(top, bottom);
-
-    console.log({ alphas });
 
     return { top, bottom, left, right };
   }
