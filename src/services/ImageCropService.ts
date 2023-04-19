@@ -1,27 +1,34 @@
+import { ImageFile } from "@/classes/ImageFile";
 import { drawHollowRect } from "@/utils/canvas.util";
 
-interface StartData {
-  image: HTMLImageElement;
-  canvas: Record<"original" | "crop", HTMLCanvasElement>;
-}
-
-interface StartSettings {
-  alphaLimit?: number;
-  color?: string | CanvasGradient | CanvasPattern;
-}
-
 export class ImageCropService {
-  public start({ image, canvas }: StartData, settings: StartSettings = {}) {
+  private canvas: Record<"original" | "crop", HTMLCanvasElement> | null = null;
+
+  public bind(canvas: typeof this.canvas) {
+    this.canvas = canvas;
+  }
+
+  public render(
+    imageFile: ImageFile,
+    settings: {
+      alphaLimit?: number;
+      color?: string | CanvasGradient | CanvasPattern;
+    } = {}
+  ) {
+    if (!this.canvas) return;
+
     const ctx = {
-      original: canvas.original.getContext("2d"),
-      crop: canvas.crop.getContext("2d"),
+      original: this.canvas.original.getContext("2d"),
+      crop: this.canvas.crop.getContext("2d"),
     };
     if (!ctx.original || !ctx.crop) return;
 
-    canvas.original.width = image.width;
-    canvas.original.height = image.height;
+    const { image } = imageFile;
 
-    ctx.original.clearRect(0, 0, canvas.original.width, canvas.original.height);
+    this.canvas.original.width = image.width;
+    this.canvas.original.height = image.height;
+
+    ctx.original.clearRect(0, 0, this.canvas.original.width, this.canvas.original.height);
     ctx.original.drawImage(image, 0, 0);
 
     const cropLimits = this.getCropLimits(ctx.original, ((settings.alphaLimit || 0) * 255) / 100);
@@ -29,30 +36,30 @@ export class ImageCropService {
     ctx.original.fillStyle = settings.color || "#ff0000";
     drawHollowRect(ctx.original, cropLimits);
 
-    canvas.crop.width = cropLimits.right - cropLimits.left;
-    canvas.crop.height = cropLimits.bottom - cropLimits.top;
+    this.canvas.crop.width = cropLimits.right - cropLimits.left;
+    this.canvas.crop.height = cropLimits.bottom - cropLimits.top;
 
-    ctx.crop.clearRect(0, 0, canvas.crop.width, canvas.crop.height);
+    ctx.crop.clearRect(0, 0, this.canvas.crop.width, this.canvas.crop.height);
     ctx.crop.drawImage(
       image,
       cropLimits.left,
       cropLimits.top,
-      canvas.crop.width,
-      canvas.crop.height,
+      this.canvas.crop.width,
+      this.canvas.crop.height,
       0,
       0,
-      canvas.crop.width,
-      canvas.crop.height
+      this.canvas.crop.width,
+      this.canvas.crop.height
     );
 
     return {
       original: {
-        width: canvas.original.width,
-        height: canvas.original.height,
+        width: this.canvas.original.width,
+        height: this.canvas.original.height,
       },
       crop: {
-        width: canvas.crop.width,
-        height: canvas.crop.height,
+        width: this.canvas.crop.width,
+        height: this.canvas.crop.height,
       },
     };
   }
@@ -111,5 +118,3 @@ export class ImageCropService {
     return { top, bottom, left, right };
   }
 }
-
-export default new ImageCropService();

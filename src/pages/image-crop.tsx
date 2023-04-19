@@ -2,8 +2,10 @@ import { ImageFile } from "@/classes/ImageFile";
 import { NumberInput } from "@/components/inputs/NumberInput";
 import { usePasteImages } from "@/hooks/usePasteImage";
 import { SidebarLayout } from "@/layouts/SidebarLayout";
-import imageCropService from "@/services/ImageCropService";
+import { ImageCropService } from "@/services/ImageCropService";
 import React from "react";
+
+const service = new ImageCropService();
 
 export default function ImageCrop() {
   const [imageFile, setImageFile] = React.useState<ImageFile>();
@@ -12,7 +14,7 @@ export default function ImageCrop() {
   const [alphaLimit, setAlphaLimit] = React.useState<number | undefined>(0);
   const [color, setColor] = React.useState("#ff0000");
 
-  const [output, setOutput] = React.useState<ReturnType<typeof imageCropService["start"]>>();
+  const [output, setOutput] = React.useState<ReturnType<typeof service["render"]>>();
 
   const originalRef = React.useRef<HTMLCanvasElement>(null);
   const croppedRef = React.useRef<HTMLCanvasElement>(null);
@@ -20,15 +22,13 @@ export default function ImageCrop() {
   usePasteImages((images) => setImageFile(images[0]));
 
   React.useEffect(() => {
+    service.bind({ original: originalRef.current!, crop: croppedRef.current! });
+  }, []);
+
+  React.useEffect(() => {
     if (!imageFile) return;
 
-    const output = imageCropService.start(
-      {
-        image: imageFile.image,
-        canvas: { original: originalRef.current!, crop: croppedRef.current! },
-      },
-      { alphaLimit, color }
-    );
+    const output = service.render(imageFile, { alphaLimit, color });
 
     setOutput(output);
   }, [imageFile, alphaLimit, color]);
@@ -49,8 +49,12 @@ export default function ImageCrop() {
 
           {output && (
             <div>
-              <div>ORIGINAL: {output.original.width}x{output.original.height}</div>
-              <div>CROP: {output.crop.width}x{output.crop.height}</div>
+              <div>
+                ORIGINAL: {output.original.width}x{output.original.height}
+              </div>
+              <div>
+                CROP: {output.crop.width}x{output.crop.height}
+              </div>
             </div>
           )}
         </div>
