@@ -15,13 +15,7 @@ export class ImageCropService {
     return this;
   }
 
-  public render(
-    imageFile: ImageFile,
-    settings: {
-      alphaLimit?: number;
-      color?: string | CanvasGradient | CanvasPattern;
-    } = {}
-  ) {
+  public render(imageFile: ImageFile, settings: ImageCropService.Settings = {}) {
     if (!this.canvas || !this.ctx) return;
 
     const { image } = imageFile;
@@ -117,5 +111,12 @@ export class ImageCropService {
     const left = getLeftLimit(top, bottom);
 
     return { top, bottom, left, right };
+  }
+}
+
+namespace ImageCropService {
+  export interface Settings {
+    alphaLimit?: number;
+    color?: string | CanvasGradient | CanvasPattern;
   }
 }
