@@ -7,14 +7,14 @@ import React from "react";
 
 const service = new ImageCropService();
 
-export default function ImageCrop() {
+export const ImageCropView: React.FC = () => {
   const [imageFile, setImageFile] = React.useState<ImageFile>();
 
   // Settings
   const [alphaLimit, setAlphaLimit] = React.useState<number | undefined>(0);
   const [color, setColor] = React.useState("#ff0000");
 
-  const [output, setOutput] = React.useState<ReturnType<typeof service["render"]>>();
+  const [output, setOutput] = React.useState<ReturnType<(typeof service)["render"]>>();
 
   const originalRef = React.useRef<HTMLCanvasElement>(null);
   const croppedRef = React.useRef<HTMLCanvasElement>(null);
@@ -68,4 +68,4 @@ export default function ImageCrop() {
       </div>
     </SidebarLayout>
   );
-}
+};

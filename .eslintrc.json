@@ -1,5 +1,5 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["prettier", "plugin:react/recommended", "eslint:recommended", "standard", "plugin:prettier/recommended"],
   "rules": {
     "react/no-children-prop": "off",
     "import/no-anonymous-default-export": "off"

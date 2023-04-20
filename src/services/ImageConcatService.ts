@@ -22,6 +22,7 @@ export class ImageConcatService {
 
   public render(imageFiles: ImageFile[], settings: ImageConcatService.Settings = defaultSettings) {
     if (!this.canvas || !this.ctx) return;
+    console.log("ImageConcatService.render", settings);
 
     this.updateCanvasSize(imageFiles, settings);
     this.clearCanvas(settings);
@@ -40,7 +41,7 @@ export class ImageConcatService {
         }
       }, 0);
     } else {
-      imageFiles.reduce((current, { image }, i) => {
+      imageFiles.reduce((current, { image }) => {
         if (settings.direction === "column") {
           let dx = 0;
           if (settings.align === "center") dx = this.canvas!.width / 2 - image.width / 2;
@@ -61,10 +62,7 @@ export class ImageConcatService {
   }
 
   private clearCanvas(settings: ImageConcatService.Settings) {
-    console.log("clearCanvas")
-
     if (settings.alpha > 0) {
-      console.log("clearCanvas", settings.alpha, `${settings.background}${alphaToHex(settings.alpha)}`)
       this.ctx!.fillStyle = `${settings.background}${alphaToHex(settings.alpha)}`;
       return this.ctx!.fillRect(0, 0, this.canvas!.width, this.canvas!.height);
     }

@@ -4,10 +4,11 @@ import { usePasteImages } from "@/hooks/usePasteImage";
 import { SidebarLayout } from "@/layouts/SidebarLayout";
 import { ImageConcatService } from "@/services/ImageConcatService";
 import React from "react";
+import "./ImageConcatView.scss";
 
 const service = new ImageConcatService();
 
-export default function ImageConcat() {
+export const ImageConcatView: React.FC = () => {
   const [imageFiles, setImageFiles] = React.useState<ImageFile[]>([]);
 
   // Settings
@@ -20,7 +21,7 @@ export default function ImageConcat() {
 
   const [zoom, setZoom] = React.useState<number | undefined>(50);
 
-  const [output, setOutput] = React.useState<ReturnType<typeof service["render"]>>();
+  const [output, setOutput] = React.useState<ReturnType<(typeof service)["render"]>>();
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -91,4 +92,4 @@ export default function ImageConcat() {
       </div>
     </SidebarLayout>
   );
-}
+};

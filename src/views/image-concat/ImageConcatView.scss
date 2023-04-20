@@ -1,33 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-// TODO: Temporary location
-
 #image-concat {
   .canvas-display {
     position: relative;
@@ -51,7 +21,7 @@ body {
       overflow-x: auto;
       overflow-y: scroll;
       margin-right: 16px;
-    
+
       & > div {
         width: 100%;
 
@@ -67,7 +37,7 @@ body {
       overflow-y: auto;
       margin-right: 16px;
       padding-bottom: 16px;
-    
+
       & > div {
         height: 100%;
 
