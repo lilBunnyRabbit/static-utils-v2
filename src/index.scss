@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 html {
-  background: theme("colors.zinc.900");
-  color: theme("colors.zinc.100");
+  background: theme("colors.zinc.100");
+  color: theme("colors.zinc.900");
+}
+
+@layer base {
+  h3 {
+    font: {
+      size: theme("fontSize.lg");
+      weight: theme("fontWeight.medium");
+    }
+  }
 }

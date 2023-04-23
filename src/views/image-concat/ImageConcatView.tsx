@@ -54,9 +54,9 @@ export const ImageConcatView: React.FC = () => {
   return (
     <SidebarLayout id="image-concat">
       <div className="relative w-full h-full flex flex-col justify-between">
-        <div className="flex flex-col gap-4">
-          <NumberInput className="w-full text-black pl-2" label="Gap" min={0} max={100} state={[gap, setGap]} />
-          <NumberInput className="w-full text-black pl-2" label="Alpha" min={0} max={100} state={[alpha, setAlpha]} />
+        <div className="flex flex-col gap-4 text-zinc-100">
+          <NumberInput className="w-full text-zinc-900 pl-2" label="Gap" min={0} max={100} state={[gap, setGap]} />
+          <NumberInput className="w-full text-zinc-900 pl-2" label="Alpha" min={0} max={100} state={[alpha, setAlpha]} />
           <div>
             <label>Align</label>
             <select className="text-black" value={align} onChange={(e) => setAlign(e.target.value as typeof align)}>
@@ -75,7 +75,7 @@ export const ImageConcatView: React.FC = () => {
             <label>Column?</label>
           </div>
 
-          <NumberInput className="w-full text-black pl-2" label="Zoom" min={0} max={100} state={[zoom, setZoom]} />
+          <NumberInput className="w-full text-zinc-900 pl-2" label="Zoom" min={0} max={100} state={[zoom, setZoom]} />
         </div>
 
         <input
@@ -87,7 +87,7 @@ export const ImageConcatView: React.FC = () => {
 
       <div className="canvas-display" data-direction={settings.direction}>
         <div style={{ [settings.direction === "column" ? "maxWidth" : "maxHeight"]: `${zoom}%` }}>
-          <canvas ref={canvasRef} />
+          <canvas ref={canvasRef} className="bg-white shadow-md" />
         </div>
       </div>
     </SidebarLayout>

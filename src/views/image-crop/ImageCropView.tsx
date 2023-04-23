@@ -1,8 +1,11 @@
 import { ImageFile } from "@/classes/ImageFile";
 import { NumberInput } from "@/components/inputs/NumberInput";
+import { Paper } from "@/components/inputs/Paper";
 import { usePasteImages } from "@/hooks/usePasteImage";
 import { SidebarLayout } from "@/layouts/SidebarLayout";
 import { ImageCropService } from "@/services/ImageCropService";
+import { cx } from "@/utils/class.util";
+import { formatDimensions } from "@/utils/format.util";
 import React from "react";
 
 const service = new ImageCropService();
@@ -12,7 +15,6 @@ export const ImageCropView: React.FC = () => {
 
   // Settings
   const [alphaLimit, setAlphaLimit] = React.useState<number | undefined>(0);
-  const [color, setColor] = React.useState("#ff0000");
 
   const [output, setOutput] = React.useState<ReturnType<(typeof service)["render"]>>();
 
@@ -28,43 +30,42 @@ export const ImageCropView: React.FC = () => {
   React.useEffect(() => {
     if (!imageFile) return;
 
-    const output = service.render(imageFile, { alphaLimit, color });
+    const output = service.render(imageFile, { alphaLimit, color: "#18181b" });
 
     setOutput(output);
-  }, [imageFile, alphaLimit, color]);
+  }, [imageFile, alphaLimit]);
 
   return (
     <SidebarLayout>
       <div className="relative w-full h-full flex flex-col justify-between">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 text-zinc-100">
           <NumberInput
-            className="w-full text-black pl-2"
+            className="w-full text-zinc-900 pl-2"
             label="Alpha"
             min={0}
             max={100}
             state={[alphaLimit, setAlphaLimit]}
           />
-
-          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-
-          {output && (
-            <div>
-              <div>
-                ORIGINAL: {output.original.width}x{output.original.height}
-              </div>
-              <div>
-                CROP: {output.crop.width}x{output.crop.height}
-              </div>
-            </div>
-          )}
         </div>
 
         <input type="file" accept="image/*" onChange={ImageFile.fromUpload((images) => setImageFile(images[0]))} />
       </div>
 
-      <div className="relative w-full h-full grid grid-cols-[1fr,1fr] gap-4 justify-center place-items-center">
-        <canvas ref={originalRef} className="border border-red-400 object-contain max-w-full max-h-full" />
-        <canvas ref={croppedRef} className="border border-red-400 object-contain max-w-full max-h-full" />
+      <div className="relative w-full h-full grid grid-cols-[repeat(2,1fr)] grid-rows-[min-content,1fr] gap-x-8 gap-y-8 justify-center place-items-center">
+        {output && (
+          <>
+            <h3 children={formatDimensions(output.original)} />
+            <h3 children={formatDimensions(output.crop)} />
+          </>
+        )}
+
+        <div className="w-full h-full overflow-hidden flex items-center justify-center">
+          <canvas ref={originalRef} className={cx("object-contain max-w-full max-h-full bg-white shadow-md", !imageFile && "hidden")} />
+        </div>
+
+        <div className="w-full h-full overflow-hidden flex items-center justify-center">
+          <canvas ref={croppedRef} className={cx("object-contain max-w-full max-h-full bg-white shadow-md", !imageFile && "hidden")} />
+        </div>
       </div>
     </SidebarLayout>
   );
