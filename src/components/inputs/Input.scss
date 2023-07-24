@@ -1,0 +1,73 @@
+@use "sass:math";
+
+$distance: 4px;
+
+input.neu-input {
+  // Size
+  height: 36px;
+  width: 100%;
+  padding: 0px 1em;
+
+  color: theme("colors.base");
+  font: {
+    size: 16px;
+    weight: 400;
+  }  
+
+  // Design
+  background-color: white !important;
+  border: 2px solid theme("colors.base");
+  border-radius: 0.25em;
+  box-shadow: $distance $distance 0px 0px theme("colors.base");
+
+  // &[data-has-label="true"] {
+  //   border-radius: 0px 0.25em 0.25em 0.25em;
+  // }
+
+  &:disabled {
+    box-shadow: none !important;
+    opacity: 0.75 !important;
+    pointer-events: none !important;
+  }
+}
+
+label.neu-input-label {
+  display: block;
+
+  // Size
+  width: fit-content;
+  height: 22px;
+  padding: 0px 0.5em;
+
+  color: theme("colors.base");
+  font: {
+    size: 14px;
+    weight: 500;
+  }
+
+  // Design
+  // background-color: white !important;
+  // border: 2px solid theme("colors.base");
+  // border-bottom: 0px;
+  // border-radius: 0.25em 0.25em 0px 0px;
+  // box-shadow: $distance $distance 0px 0px theme("colors.base");
+
+  // // Data Color
+  // &[data-color="primary"] {
+  //   background-color: theme("colors.primary") !important;
+  // }
+
+  // &[data-color="secondary"] {
+  //   background-color: theme("colors.secondary") !important;
+  // }
+
+  // &[data-color="tertiary"] {
+  //   background-color: theme("colors.tertiary") !important;
+  // }
+
+  &[data-disabled="true"] {
+    box-shadow: none !important;
+    opacity: 0.75 !important;
+    pointer-events: none !important;
+  }
+}

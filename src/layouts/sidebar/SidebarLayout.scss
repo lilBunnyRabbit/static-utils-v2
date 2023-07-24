@@ -1,0 +1,42 @@
+@import "../../styles/neu.scss";
+
+.layout-sidebar {
+  position: relative;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  & > div:nth-child(1) {
+    position: relative;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    row-gap: 1rem;
+    margin: 1rem;
+
+    & > div:nth-child(1) {
+      @include neu-box(2px);
+
+      position: relative;
+      padding: 1rem;
+      width: 100%;
+      overflow: hidden;
+
+      &:nth-child(1) {
+        background-color: theme("colors.secondary");
+        color: theme("colors.base");
+      }
+
+      &:nth-child(2) {
+        background-color: theme("colors.secondary");
+        color: theme("colors.base"); 
+      }
+    }
+
+    & > div:nth-child(1) {
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+}

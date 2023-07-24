@@ -1,9 +1,62 @@
 import { ImageFile } from "@/classes/ImageFile";
+import { useObjectState } from "@/hooks/useObjectState";
 import { drawHollowRect } from "@/utils/canvas.util";
+import React from "react";
 
 export class ImageCropService {
   private canvas: Record<"original" | "crop", HTMLCanvasElement> | null = null;
   private ctx: Record<"original" | "crop", CanvasRenderingContext2D> | null = null;
+
+  constructor(readonly debug = true) {}
+
+  private log() {
+    // if (!this.debug) return;
+    console.log(`${ImageCropService.name}`, this.log.prototype)
+  }
+
+  static useSettings() {
+    return useObjectState<ImageCropService.Settings>({
+      alphaLimit: 0,
+      color: "#18181b",
+    });
+  }
+
+  static use(imageFile?: ImageFile, settings?: ImageCropService.Settings) {
+    const [output, setOutput] = React.useState<ReturnType<ImageCropService["render"]>>();
+
+    const { current: service } = React.useRef<ImageCropService>(new ImageCropService());
+
+    const originalRef = React.useRef<HTMLCanvasElement>(null);
+    const croppedRef = React.useRef<HTMLCanvasElement>(null);
+
+    const render = React.useCallback(
+      async (imageFile: ImageFile, settings?: ImageCropService.Settings) => {
+        const output = service.render(imageFile, settings);
+        setOutput(output);
+      },
+      [service]
+    );
+
+    React.useEffect(() => {
+      service.bind({ original: originalRef.current!, crop: croppedRef.current! });
+    }, []);
+
+    React.useEffect(() => {
+      if (!imageFile) return;
+
+      render(imageFile, settings);
+    }, [render, imageFile, settings]);
+
+    return {
+      refs: {
+        original: originalRef,
+        cropped: croppedRef,
+      },
+      service,
+      output,
+      render,
+    };
+  }
 
   public bind(canvas: NonNullable<typeof this.canvas>) {
     this.canvas = canvas;
@@ -16,6 +69,7 @@ export class ImageCropService {
   }
 
   public render(imageFile: ImageFile, settings: ImageCropService.Settings = {}) {
+    this.log();
     if (!this.canvas || !this.ctx) return;
 
     const { image } = imageFile;
@@ -114,7 +168,7 @@ export class ImageCropService {
   }
 }
 
-namespace ImageCropService {
+export namespace ImageCropService {
   export interface Settings {
     alphaLimit?: number;
     color?: string | CanvasGradient | CanvasPattern;

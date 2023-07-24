@@ -1,0 +1,26 @@
+@import "./Button.scss";
+
+button.neu-icon-button {
+  @extend .neu-button;
+
+  aspect-ratio: 1 / 1;
+  min-width: auto;
+  padding: 0px;
+
+  & > svg {
+    margin: auto;
+    height: 18px;
+  }
+
+  &[data-size="sm"] {
+    & > svg {
+      height: 14px;
+    }
+  }
+
+  &[data-size="lg"] {
+    & > svg {
+      height: 22px;
+    }
+  }
+}

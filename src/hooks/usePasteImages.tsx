@@ -1,7 +1,7 @@
 import { ImageFile } from "@/classes/ImageFile";
 import React from "react";
 
-export function usePasteImages(callback: (image: ImageFile[]) => void) {
+export function usePasteImages(callback: (imageFiles: ImageFile[]) => void) {
   React.useEffect(() => {
     let pasteEnabled = true;
 

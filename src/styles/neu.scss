@@ -1,0 +1,27 @@
+@use "sass:math";
+
+@mixin neu-box($width, $distance: 2 * $width) {
+
+  border: $width solid theme("colors.base");
+  border-radius: $distance;
+  box-shadow: $distance $distance 0px 0px theme("colors.base");
+}
+
+@mixin neu-hover-box($width, $distance: 2 * $width) {
+  @include neu-box($width, $distance);
+
+  &:hover {
+    transform: translateX(math.div($distance, 2)) translateY(math.div($distance, 2));
+    box-shadow: math.div($distance, 2) math.div($distance, 2) 0px 0px theme("colors.base");
+  }
+
+  &:active {
+    transform: translateX($distance) translateY($distance);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    transform: translateX(0px) translateY(0px) !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,7 +1,7 @@
 import { ImageFile } from "@/classes/ImageFile";
 import { NumberInput } from "@/components/inputs/NumberInput";
-import { usePasteImages } from "@/hooks/usePasteImage";
-import { SidebarLayout } from "@/layouts/SidebarLayout";
+import { usePasteImages } from "@/hooks/usePasteImages";
+import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
 import { ImageConcatService } from "@/services/ImageConcatService";
 import React from "react";
 import "./ImageConcatView.scss";
@@ -52,7 +52,7 @@ export const ImageConcatView: React.FC = () => {
   }, [imageFiles, settings]);
 
   return (
-    <SidebarLayout id="image-concat">
+    <SidebarLayout title="Image Concat" id="image-concat">
       <div className="relative w-full h-full flex flex-col justify-between">
         <div className="flex flex-col gap-4 text-zinc-100">
           <NumberInput className="w-full text-zinc-900 pl-2" label="Gap" min={0} max={100} state={[gap, setGap]} />

@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 html {
-  background: theme("colors.zinc.100");
-  color: theme("colors.zinc.900");
+  background: theme("colors.primary");
+  color: theme("colors.base");
 }
 
 @layer base {
@@ -13,5 +13,22 @@ html {
       size: theme("fontSize.lg");
       weight: theme("fontWeight.medium");
     }
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: theme("colors.primary");
+    border: 2px solid black;
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: theme("colors.secondary");
+    border: 2px solid black;
   }
 }

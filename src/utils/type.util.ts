@@ -32,3 +32,10 @@ export function isArray<T>(value: unknown): value is T[] {
 export function isArrayOfType<T>(value: unknown, isType: (element: unknown) => element is T): value is T[] {
   return Array.isArray(value) && value.every((element) => isType(element));
 }
+
+export type PropsUnion<First extends object, Second extends object> = Omit<First, keyof Second> & Second;
+
+export type ExtendProps<
+  T extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>,
+  S extends object
+> = PropsUnion<React.ComponentProps<T>, S>;
