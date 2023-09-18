@@ -41,12 +41,14 @@ export const DashboardNavbar: React.FC = () => {
         })}
       </div>
 
-      <IconButton
-        icon={open ? Icon.ChevronLeft : Icon.ChevronRight}
-        color="error"
-        className="self-start"
-        onClick={() => setOpen((o) => !o)}
-      />
+      <div className="self-start w-full pr-[2px]">
+        <IconButton
+          icon={open ? Icon.ChevronLeft : Icon.ChevronRight}
+          color="secondary"
+          className="!w-full"
+          onClick={() => setOpen((o) => !o)}
+        />
+      </div>
     </div>
   );
 };

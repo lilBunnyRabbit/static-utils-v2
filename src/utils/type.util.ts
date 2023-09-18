@@ -39,3 +39,5 @@ export type ExtendProps<
   T extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>,
   S extends object
 > = PropsUnion<React.ComponentProps<T>, S>;
+
+export type ClassNames<T extends string> = Partial<Record<T, string | false>>;

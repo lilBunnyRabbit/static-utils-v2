@@ -1,42 +1,64 @@
 @import "../../styles/neu.scss";
 
-.layout-sidebar {
+$sidebar-width: 288px;
+
+.sidebar-layout {
   position: relative;
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  height: 100%;
+  display: flex;
   width: 100%;
+  min-height: 100vmin;
   overflow: hidden;
+  padding: 1rem;
 
-  & > div:nth-child(1) {
-    position: relative;
-    display: grid;
-    grid-template-rows: min-content 1fr;
+  &-sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
     row-gap: 1rem;
-    margin: 1rem;
+    width: $sidebar-width;
 
     & > div:nth-child(1) {
-      @include neu-box(2px);
-
-      position: relative;
-      padding: 1rem;
-      width: 100%;
-      overflow: hidden;
-
-      &:nth-child(1) {
-        background-color: theme("colors.secondary");
-        color: theme("colors.base");
-      }
-
-      &:nth-child(2) {
-        background-color: theme("colors.secondary");
-        color: theme("colors.base"); 
-      }
+      display: flex;
+      flex-direction: column;
+      row-gap: 1rem;
     }
 
-    & > div:nth-child(1) {
-      width: 100%;
-      overflow: hidden;
+    & > div:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5rem;
     }
+  }
+
+  &-body {
+    position: relative;
+    flex: 1;
+    overflow-x: hidden;
+    margin-left: calc($sidebar-width + 1rem);
+  }
+
+  &-underlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+
+    font-size: 36px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.25);
+    text-align: center;
+  }
+
+  & .sidebar-box {
+    @include neu-box(2px);
+
+    padding: 1rem;
+    background-color: theme("colors.secondary");
+    color: theme("colors.base");
   }
 }

@@ -11,36 +11,31 @@ const pagesKeys = Object.keys(Pages) as Array<keyof typeof Pages>;
 
 export const pages: PageInfo[] = pagesKeys.map((key) => Pages[key].info);
 
-export const router = createHashRouter(
-  [
-    {
-      index: true,
-      element: <IndexView />,
-    },
-    {
-      path: "/",
-      element: <DashboardLayout />,
-      children: [
-        ...pagesKeys.map((key) => ({
-          path: Pages[key].info.path,
-          element: React.createElement(Pages[key].View),
-        })),
-        {
-          path: "database",
-          element: <DatabaseView />,
-        },
-        {
-          path: "design",
-          element: <DesignView />,
-        },
-      ],
-    },
-    {
-      path: "*",
-      element: <Navigate to="/" />,
-    },
-  ]
-  // {
-  //   basename: import.meta.env.BASE_URL,
-  // }
-);
+export const router = createHashRouter([
+  {
+    index: true,
+    element: <IndexView />,
+  },
+  {
+    path: "/",
+    element: <DashboardLayout />,
+    children: [
+      ...pagesKeys.map((key) => ({
+        path: Pages[key].info.path,
+        element: React.createElement(Pages[key].View),
+      })),
+      {
+        path: "database",
+        element: <DatabaseView />,
+      },
+      {
+        path: "design",
+        element: <DesignView />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" />,
+  },
+]);

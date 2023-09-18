@@ -10,14 +10,14 @@ class ImageCropService {
   constructor(readonly debug = true) {}
 
   private log() {
-    // if (!this.debug) return;
+    if (!this.debug) return;
     console.log(`${ImageCropService.name}`, this.log.prototype);
   }
 
   static useSettings() {
     return useObjectState<ImageCropService.Settings>({
       alphaLimit: 0,
-      color: "#18181b",
+      color: "#F27C7C",
     });
   }
 

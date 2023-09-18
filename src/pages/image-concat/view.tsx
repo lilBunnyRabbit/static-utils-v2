@@ -1,10 +1,11 @@
 import { ImageFile } from "@/classes/ImageFile";
-import { NumberInput } from "@/components/inputs/NumberInput";
+import { Button } from "@/components/buttons";
+import { Input } from "@/components/inputs";
 import { usePasteImages } from "@/hooks/usePasteImages";
 import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
 import React from "react";
-import "./view.scss";
 import ImageConcatService from "./service";
+import "./view.scss";
 
 const service = new ImageConcatService();
 
@@ -24,6 +25,7 @@ const ImageConcatView: React.FC = () => {
   const [output, setOutput] = React.useState<ReturnType<(typeof service)["render"]>>();
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const settings: ImageConcatService.Settings = React.useMemo(
     () => ({
@@ -52,44 +54,69 @@ const ImageConcatView: React.FC = () => {
   }, [imageFiles, settings]);
 
   return (
-    <SidebarLayout title="Image Concat" id="image-concat">
-      <div className="relative w-full h-full flex flex-col justify-between">
+    <SidebarLayout id="image-concat" title="Image Concat" underlay="Drop your images here">
+      <>
         <div className="flex flex-col gap-4 text-zinc-100">
-          <NumberInput className="w-full text-zinc-900 pl-2" label="Gap" min={0} max={100} state={[gap, setGap]} />
-          <NumberInput
-            className="w-full text-zinc-900 pl-2"
-            label="Alpha"
+          <Input
+            type="number"
+            label="Gap"
+            value={gap}
             min={0}
             max={100}
-            state={[alpha, setAlpha]}
+            onChange={(e) => setGap(e.target.valueAsNumber)}
           />
+
+          <Input
+            type="number"
+            label="Alpha"
+            value={alpha}
+            min={0}
+            max={100}
+            onChange={(e) => setAlpha(e.target.valueAsNumber)}
+          />
+
           <div>
-            <label>Align</label>
+            <label className="mr-2 text-base">Align</label>
             <select className="text-black" value={align} onChange={(e) => setAlign(e.target.value as typeof align)}>
               <option value="start">Start</option>
               <option value="center">Center</option>
               <option value="end">End</option>
             </select>
           </div>
+
           <input type="color" value={background} onChange={(e) => setBackground(e.target.value)} />
+
           <div>
             <input type="checkbox" checked={fit} onChange={(e) => setFit(e.target.checked)} />
-            <label>Fit</label>
-          </div>
-          <div>
-            <input type="checkbox" checked={direction} onChange={(e) => setDirection(e.target.checked)} />
-            <label>Column?</label>
+            <label className="ml-2 text-base">Fit</label>
           </div>
 
-          <NumberInput className="w-full text-zinc-900 pl-2" label="Zoom" min={0} max={100} state={[zoom, setZoom]} />
+          <div>
+            <input type="checkbox" checked={direction} onChange={(e) => setDirection(e.target.checked)} />
+            <label className="ml-2 text-base">Column?</label>
+          </div>
+
+          <Input
+            type="number"
+            label="Zoom"
+            value={zoom}
+            min={0}
+            max={100}
+            onChange={(e) => setZoom(e.target.valueAsNumber)}
+          />
         </div>
 
         <input
+          ref={fileInputRef}
           type="file"
           accept="image/*"
+          multiple
+          className="hidden"
           onChange={ImageFile.fromUpload((images) => setImageFiles((current) => [...current, ...images]))}
         />
-      </div>
+
+        <Button className="!w-full mt-2" onClick={() => fileInputRef.current?.click()} children="Upload" />
+      </>
 
       <div className="canvas-display" data-direction={settings.direction}>
         <div style={{ [settings.direction === "column" ? "maxWidth" : "maxHeight"]: `${zoom}%` }}>
