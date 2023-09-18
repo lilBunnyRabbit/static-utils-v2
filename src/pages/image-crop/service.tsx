@@ -3,7 +3,7 @@ import { useObjectState } from "@/hooks/useObjectState";
 import { drawHollowRect } from "@/utils/canvas.util";
 import React from "react";
 
-export class ImageCropService {
+class ImageCropService {
   private canvas: Record<"original" | "crop", HTMLCanvasElement> | null = null;
   private ctx: Record<"original" | "crop", CanvasRenderingContext2D> | null = null;
 
@@ -11,7 +11,7 @@ export class ImageCropService {
 
   private log() {
     // if (!this.debug) return;
-    console.log(`${ImageCropService.name}`, this.log.prototype)
+    console.log(`${ImageCropService.name}`, this.log.prototype);
   }
 
   static useSettings() {
@@ -168,9 +168,12 @@ export class ImageCropService {
   }
 }
 
-export namespace ImageCropService {
+namespace ImageCropService {
   export interface Settings {
     alphaLimit?: number;
     color?: string | CanvasGradient | CanvasPattern;
   }
 }
+
+
+export default ImageCropService;

@@ -1,7 +1,7 @@
 import { Icon } from "..";
 
 /** By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL */
-export const BarsLoaderIcon: Icon = ({ color = "currentColor", ...props }) => (
+export const BarsLoader: Icon = ({ color = "currentColor", ...props }) => (
   <svg viewBox="0 0 135 140" xmlns="http://www.w3.org/2000/svg" fill={color} {...props}>
     <rect y="10" width="15" height="120" rx="6">
       <animate

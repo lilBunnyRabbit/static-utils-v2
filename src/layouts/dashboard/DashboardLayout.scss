@@ -1,0 +1,19 @@
+.dashboard-navbar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 0.5rem;
+
+  background: theme("colors.secondary");
+  transition: max-width 125ms;
+  border-right: 2px solid black;
+  overflow: hidden;
+  gap: 1rem;
+}

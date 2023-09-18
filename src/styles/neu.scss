@@ -1,9 +1,8 @@
 @use "sass:math";
 
 @mixin neu-box($width, $distance: 2 * $width) {
-
-  border: $width solid theme("colors.base");
-  border-radius: $distance;
+  border: 2px solid theme("colors.base");
+  border-radius: $distance * 2;
   box-shadow: $distance $distance 0px 0px theme("colors.base");
 }
 

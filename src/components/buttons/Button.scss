@@ -78,8 +78,8 @@
 // }
 
 button.neu-button {
-  @include neu-hover-box(2px);
-  
+  @include neu-hover-box(1px);
+
   // General
   user-select: none;
 

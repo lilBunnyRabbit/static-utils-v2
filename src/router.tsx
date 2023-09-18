@@ -1,38 +1,46 @@
-import { ImageConcatView } from "@/views/image-concat/ImageConcatView";
-import { ImageCropView } from "@/views/image-crop/ImageCropView";
 import { IndexView } from "@/views/index/IndexView";
-import { Navigate, createBrowserRouter } from "react-router-dom";
+import React from "react";
+import { Navigate, createHashRouter } from "react-router-dom";
+import { DashboardLayout } from "./layouts/dashboard/DashboardLayout";
+import * as Pages from "./pages";
+import { PageInfo } from "./types/page.type";
 import { DatabaseView } from "./views/database/DatabaseView";
 import { DesignView } from "./views/design/DesignView";
 
-export const router = createBrowserRouter(
+const pagesKeys = Object.keys(Pages) as Array<keyof typeof Pages>;
+
+export const pages: PageInfo[] = pagesKeys.map((key) => Pages[key].info);
+
+export const router = createHashRouter(
   [
     {
       index: true,
       element: <IndexView />,
     },
     {
-      path: "image-crop",
-      element: <ImageCropView />,
-    },
-    {
-      path: "image-concat",
-      element: <ImageConcatView />,
-    },
-    {
-      path: "database",
-      element: <DatabaseView />,
-    },
-    {
-      path: "design",
-      element: <DesignView />,
+      path: "/",
+      element: <DashboardLayout />,
+      children: [
+        ...pagesKeys.map((key) => ({
+          path: Pages[key].info.path,
+          element: React.createElement(Pages[key].View),
+        })),
+        {
+          path: "database",
+          element: <DatabaseView />,
+        },
+        {
+          path: "design",
+          element: <DesignView />,
+        },
+      ],
     },
     {
       path: "*",
       element: <Navigate to="/" />,
     },
-  ],
-  {
-    basename: import.meta.env.BASE_URL,
-  }
+  ]
+  // {
+  //   basename: import.meta.env.BASE_URL,
+  // }
 );

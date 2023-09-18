@@ -2,13 +2,13 @@ import { ImageFile } from "@/classes/ImageFile";
 import { NumberInput } from "@/components/inputs/NumberInput";
 import { usePasteImages } from "@/hooks/usePasteImages";
 import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
-import { ImageConcatService } from "@/services/ImageConcatService";
 import React from "react";
-import "./ImageConcatView.scss";
+import "./view.scss";
+import ImageConcatService from "./service";
 
 const service = new ImageConcatService();
 
-export const ImageConcatView: React.FC = () => {
+const ImageConcatView: React.FC = () => {
   const [imageFiles, setImageFiles] = React.useState<ImageFile[]>([]);
 
   // Settings
@@ -56,7 +56,13 @@ export const ImageConcatView: React.FC = () => {
       <div className="relative w-full h-full flex flex-col justify-between">
         <div className="flex flex-col gap-4 text-zinc-100">
           <NumberInput className="w-full text-zinc-900 pl-2" label="Gap" min={0} max={100} state={[gap, setGap]} />
-          <NumberInput className="w-full text-zinc-900 pl-2" label="Alpha" min={0} max={100} state={[alpha, setAlpha]} />
+          <NumberInput
+            className="w-full text-zinc-900 pl-2"
+            label="Alpha"
+            min={0}
+            max={100}
+            state={[alpha, setAlpha]}
+          />
           <div>
             <label>Align</label>
             <select className="text-black" value={align} onChange={(e) => setAlign(e.target.value as typeof align)}>
@@ -93,3 +99,5 @@ export const ImageConcatView: React.FC = () => {
     </SidebarLayout>
   );
 };
+
+export default ImageConcatView;

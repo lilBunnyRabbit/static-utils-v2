@@ -1,6 +1,6 @@
 import { Icon } from "..";
 
-export const PrintIcon: Icon = ({ color = "currentColor", ...props }) => (
+export const Print: Icon = ({ color = "currentColor", ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

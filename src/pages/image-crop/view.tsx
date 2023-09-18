@@ -3,12 +3,12 @@ import { Input } from "@/components/inputs";
 import { useDropImages } from "@/hooks/useDropImages";
 import { usePasteImages } from "@/hooks/usePasteImages";
 import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
-import { ImageCropService } from "@/services/imageCrop.service";
 import { cx } from "@/utils/class.util";
 import { formatDimensions } from "@/utils/format.util";
 import React from "react";
+import ImageCropService from "./service";
 
-export const ImageCropView: React.FC = () => {
+const ImageCropView: React.FC = () => {
   const [imageFile, setImageFile] = React.useState<ImageFile>();
   const [settings, setSetting] = ImageCropService.useSettings();
 
@@ -67,3 +67,5 @@ export const ImageCropView: React.FC = () => {
     </SidebarLayout>
   );
 };
+
+export default ImageCropView;

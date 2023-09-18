@@ -10,7 +10,7 @@ const defaultSettings: ImageConcatService.Settings = {
   direction: "column",
 };
 
-export class ImageConcatService {
+class ImageConcatService {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
 
@@ -127,7 +127,7 @@ export class ImageConcatService {
   }
 }
 
-export namespace ImageConcatService {
+namespace ImageConcatService {
   export interface Settings {
     gap: number;
     align: "start" | "center" | "end";
@@ -137,3 +137,5 @@ export namespace ImageConcatService {
     direction: "column" | "row";
   }
 }
+
+export default ImageConcatService;

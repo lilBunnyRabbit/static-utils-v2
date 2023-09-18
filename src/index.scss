@@ -7,6 +7,15 @@ html {
   color: theme("colors.base");
 }
 
+body {
+  margin-left: 56px;
+  transition: margin-left 125ms;
+
+  &.open-sidebar {
+    margin-left: 256px;
+  }
+}
+
 @layer base {
   h3 {
     font: {
@@ -19,14 +28,14 @@ html {
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: theme("colors.primary");
     border: 2px solid black;
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: theme("colors.secondary");
     border: 2px solid black;
