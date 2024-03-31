@@ -1,5 +1,7 @@
 import { ImageFile } from "@/classes/ImageFile";
+import { useObjectState } from "@/hooks/useObjectState";
 import { alphaToHex } from "@/utils/number.util";
+import React from "react";
 
 const defaultSettings: ImageConcatService.Settings = {
   gap: 0,
@@ -13,6 +15,50 @@ const defaultSettings: ImageConcatService.Settings = {
 class ImageConcatService {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
+
+  static useSettings() {
+    return useObjectState<ImageConcatService.Settings>({
+      gap: 0,
+      align: "start",
+      background: "#ff0000",
+      alpha: 0,
+      fit: false,
+      direction: "column",
+    });
+  }
+
+  static use(imageFiles?: ImageFile[], settings?: ImageConcatService.Settings) {
+    const [output, setOutput] = React.useState<ReturnType<ImageConcatService["render"]>>();
+
+    const { current: service } = React.useRef<ImageConcatService>(new ImageConcatService());
+
+    const ref = React.useRef<HTMLCanvasElement>(null);
+
+    const render = React.useCallback(
+      async (imageFiles: ImageFile[], settings?: ImageConcatService.Settings) => {
+        const output = service.render(imageFiles, settings);
+        setOutput(output);
+      },
+      [service]
+    );
+
+    React.useEffect(() => {
+      service.bind(ref.current!);
+    }, []);
+
+    React.useEffect(() => {
+      if (!imageFiles) return;
+
+      render(imageFiles, settings);
+    }, [render, imageFiles, settings]);
+
+    return {
+      ref: ref,
+      service,
+      output,
+      render,
+    };
+  }
 
   public bind(canvas: NonNullable<typeof this.canvas>) {
     this.canvas = canvas;

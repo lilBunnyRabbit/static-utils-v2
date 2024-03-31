@@ -14,7 +14,8 @@ export const pages: PageInfo[] = pagesKeys.map((key) => Pages[key].info);
 export const router = createHashRouter([
   {
     index: true,
-    element: <IndexView />,
+    // element: <IndexView />,
+    element: <Navigate to={pages[0].path} />
   },
   {
     path: "/",

@@ -1,0 +1,65 @@
+@import "../../../styles/neu.scss";
+@import "../../../styles/utils.scss";
+
+input.neu-checkbox {
+  @include neu-hover-box(1px);
+
+  appearance: none;
+  cursor: pointer;
+
+  // Size
+  height: 18px;
+  aspect-ratio: 1 / 1;
+
+  // Design
+  background-color: white;
+
+  // Data Size
+  &[data-size="sm"] {
+    height: 14px;
+  }
+
+  &[data-size="lg"] {
+    height: 22px;
+  }
+
+  &:disabled {
+    opacity: 0.75 !important;
+    pointer-events: none !important;
+  }
+
+  &:checked {
+    content: url("./checkbox.svg");
+
+    @include data_color("background-color");
+  }
+}
+
+label.neu-checkbox-label {
+  display: block;
+
+  // Size
+  width: fit-content;
+  height: 22px;
+
+  color: theme("colors.base");
+  font: {
+    size: 16px;
+    weight: 500;
+  }
+
+  // Data Size
+  &[data-size="sm"] {
+    font-size: 14px;
+  }
+
+  &[data-size="lg"] {
+    font-size: 18px;
+  }
+
+  &[data-disabled="true"] {
+    box-shadow: none !important;
+    opacity: 0.75 !important;
+    pointer-events: none !important;
+  }
+}

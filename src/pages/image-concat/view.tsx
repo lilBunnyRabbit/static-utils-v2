@@ -1,100 +1,89 @@
 import { ImageFile } from "@/classes/ImageFile";
 import { Button } from "@/components/buttons";
-import { Input } from "@/components/inputs";
-import { usePasteImages } from "@/hooks/usePasteImages";
+import { Checkbox, Input } from "@/components/inputs";
 import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
 import React from "react";
 import ImageConcatService from "./service";
 import "./view.scss";
 
-const service = new ImageConcatService();
-
 const ImageConcatView: React.FC = () => {
   const [imageFiles, setImageFiles] = React.useState<ImageFile[]>([]);
 
-  // Settings
-  const [gap, setGap] = React.useState<number | undefined>(0);
-  const [alpha, setAlpha] = React.useState<number | undefined>(0);
-  const [align, setAlign] = React.useState<ImageConcatService.Settings["align"]>("start");
-  const [background, setBackground] = React.useState("#ff0000");
-  const [fit, setFit] = React.useState(false);
-  const [direction, setDirection] = React.useState(true);
+  const [settings, setSetting] = ImageConcatService.useSettings();
+  const { ref, output } = ImageConcatService.use(imageFiles, settings);
 
   const [zoom, setZoom] = React.useState<number | undefined>(50);
 
-  const [output, setOutput] = React.useState<ReturnType<(typeof service)["render"]>>();
-
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const dropRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const settings: ImageConcatService.Settings = React.useMemo(
-    () => ({
-      gap: gap || 0,
-      align,
-      background,
-      alpha: alpha || 0,
-      fit,
-      direction: direction ? "column" : "row",
-    }),
-    [gap, alpha, align, background, fit, direction]
-  );
+  const { activeDrag } = ImageFile.useDrop(dropRef, (images) => setImageFiles((current) => [...current, ...images]));
 
-  usePasteImages((images) => setImageFiles((current) => [...current, ...images]));
-
-  React.useEffect(() => {
-    service.bind(canvasRef.current!);
-  }, []);
-
-  React.useEffect(() => {
-    if (!imageFiles) return;
-
-    const output = service.render(imageFiles, settings);
-
-    setOutput(output);
-  }, [imageFiles, settings]);
+  ImageFile.useClipboard((images) => setImageFiles((current) => [...current, ...images]));
 
   return (
-    <SidebarLayout id="image-concat" title="Image Concat" underlay="Drop your images here">
+    <SidebarLayout
+      ref={dropRef}
+      id="image-concat"
+      title="Image Concat"
+      underlay={
+        <>
+          Drop or paste your
+          <br />
+          images here
+        </>
+      }
+      actions={<Button className="!w-full" onClick={() => fileInputRef.current?.click()} children="Upload" />}
+      classNames={{
+        root: activeDrag && "!bg-success",
+      }}
+    >
       <>
         <div className="flex flex-col gap-4 text-zinc-100">
           <Input
             type="number"
             label="Gap"
-            value={gap}
+            value={settings.gap}
             min={0}
             max={100}
-            onChange={(e) => setGap(e.target.valueAsNumber)}
+            onChange={(e) => setSetting("gap", e.target.valueAsNumber)}
           />
 
           <Input
             type="number"
             label="Alpha"
-            value={alpha}
+            value={settings.alpha}
             min={0}
             max={100}
-            onChange={(e) => setAlpha(e.target.valueAsNumber)}
+            onChange={(e) => setSetting("alpha", e.target.valueAsNumber)}
           />
 
           <div>
             <label className="mr-2 text-base">Align</label>
-            <select className="text-black" value={align} onChange={(e) => setAlign(e.target.value as typeof align)}>
+            <select
+              className="text-black"
+              value={settings.align}
+              onChange={(e) => setSetting("align", e.target.value as ImageConcatService.Settings["align"])}
+            >
               <option value="start">Start</option>
               <option value="center">Center</option>
               <option value="end">End</option>
             </select>
           </div>
 
-          <input type="color" value={background} onChange={(e) => setBackground(e.target.value)} />
+          <input type="color" value={settings.background} onChange={(e) => setSetting("background", e.target.value)} />
 
-          <div>
-            <input type="checkbox" checked={fit} onChange={(e) => setFit(e.target.checked)} />
-            <label className="ml-2 text-base">Fit</label>
-          </div>
+          <Checkbox
+            checked={settings.fit}
+            onChange={(e) => setSetting("fit", e.target.checked)}
+            label={settings.fit ? "Fit size" : "Original size"}
+          />
 
-          <div>
-            <input type="checkbox" checked={direction} onChange={(e) => setDirection(e.target.checked)} />
-            <label className="ml-2 text-base">Column?</label>
-          </div>
+          <Checkbox
+            checked={settings.direction === "column"}
+            onChange={(e) => setSetting("direction", e.target.checked ? "column" : "row")}
+            label={settings.direction === "column" ? "Y-Axis" : "X-Axis"}
+          />
 
           <Input
             type="number"
@@ -114,13 +103,11 @@ const ImageConcatView: React.FC = () => {
           className="hidden"
           onChange={ImageFile.fromUpload((images) => setImageFiles((current) => [...current, ...images]))}
         />
-
-        <Button className="!w-full mt-2" onClick={() => fileInputRef.current?.click()} children="Upload" />
       </>
 
       <div className="canvas-display" data-direction={settings.direction}>
         <div style={{ [settings.direction === "column" ? "maxWidth" : "maxHeight"]: `${zoom}%` }}>
-          <canvas ref={canvasRef} className="bg-white shadow-md" />
+          <canvas ref={ref} className="bg-white shadow-md" width={0} height={0} />
         </div>
       </div>
     </SidebarLayout>

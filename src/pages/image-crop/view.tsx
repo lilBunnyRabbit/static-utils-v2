@@ -1,34 +1,42 @@
 import { ImageFile } from "@/classes/ImageFile";
+import { Button } from "@/components/buttons";
 import { Input } from "@/components/inputs";
-import { useDropImages } from "@/hooks/useDropImages";
-import { usePasteImages } from "@/hooks/usePasteImages";
 import { SidebarLayout } from "@/layouts/sidebar/SidebarLayout";
 import { cx } from "@/utils/class.util";
 import { formatDimensions } from "@/utils/format.util";
 import React from "react";
 import ImageCropService from "./service";
-import { Button } from "@/components/buttons";
 import "./view.scss";
+import { Icon } from "@/components/icons";
+
+// https://developer.chrome.com/blog/offscreen-canvas/
 
 const ImageCropView: React.FC = () => {
   const [imageFile, setImageFile] = React.useState<ImageFile>();
 
   const [settings, setSetting] = ImageCropService.useSettings();
-  const { refs, output } = ImageCropService.use(imageFile, settings);
+  const { refs, output, isLoading } = ImageCropService.use(imageFile, settings);
 
   const dropRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const { activeDrag } = useDropImages(dropRef, (images) => setImageFile(images[0]));
+  const { activeDrag } = ImageFile.useDrop(dropRef, (images) => setImageFile(images[0]));
 
-  usePasteImages((images) => setImageFile(images[0]));
+  ImageFile.useClipboard((images) => setImageFile(images[0]));
 
   return (
     <SidebarLayout
       ref={dropRef}
       id="image-crop"
       title="Image Crop"
-      underlay="Drop your image here"
+      underlay={
+        <>
+          Drop or paste your
+          <br />
+          images here
+        </>
+      }
+      actions={<Button className="!w-full" onClick={() => fileInputRef.current?.click()} children="Upload" />}
       classNames={{
         root: activeDrag && "!bg-success",
       }}
@@ -50,8 +58,6 @@ const ImageCropView: React.FC = () => {
           accept="image/*"
           onChange={ImageFile.fromUpload((images) => setImageFile(images[0]))}
         />
-
-        <Button className="!w-full mt-2" onClick={() => fileInputRef.current?.click()} children="Upload" />
       </>
 
       <div className="relative w-full h-full grid grid-cols-[repeat(2,1fr)] grid-rows-[min-content,1fr] gap-x-8 gap-y-8 justify-center place-items-center">
@@ -75,6 +81,12 @@ const ImageCropView: React.FC = () => {
             className={cx("object-contain max-w-full max-h-full bg-white shadow-md", !imageFile && "hidden")}
           />
         </div>
+
+        {isLoading && (
+          <div>
+            <Icon.BarsLoader />
+          </div>
+        )}
       </div>
     </SidebarLayout>
   );

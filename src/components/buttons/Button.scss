@@ -1,81 +1,7 @@
 @use "sass:math";
 
 @import "../../styles/neu.scss";
-
-// $distance: 4px;
-
-// button.neu-button {
-//   // General
-//   user-select: none;
-
-//   // Size
-//   width: fit-content;
-//   min-width: 64px;
-//   height: 36px;
-//   padding: 0px 1em;
-
-//   cursor: pointer;
-//   color: theme("colors.base");
-//   font: {
-//     size: 18px;
-//     weight: 600;
-//   }
-
-//   // Design
-//   background-color: white !important;
-//   border: 2px solid theme("colors.base");
-//   border-radius: 0.25em;
-//   box-shadow: $distance $distance 0px 0px theme("colors.base");
-
-//   &:hover {
-//     transform: translateX(math.div($distance, 2)) translateY(math.div($distance, 2));
-//     box-shadow: math.div($distance, 2) math.div($distance, 2) 0px 0px theme("colors.base");
-//   }
-
-//   &:active {
-//     transform: translateX($distance) translateY($distance);
-//     box-shadow: none;
-//   }
-
-//   // Data Size
-//   &[data-size="sm"] {
-//     height: 32px;
-//     font-size: 14px;
-//   }
-
-//   &[data-size="lg"] {
-//     height: 44px;
-//     font-size: 22px;
-//   }
-
-//   // Data Color
-//   &[data-color="primary"] {
-//     background-color: theme("colors.primary") !important;
-//   }
-
-//   &[data-color="secondary"] {
-//     background-color: theme("colors.secondary") !important;
-//   }
-
-//   &[data-color="tertiary"] {
-//     background-color: theme("colors.tertiary") !important;
-//   }
-
-//   &[data-color="error"] {
-//     background-color: theme("colors.error") !important;
-//   }
-
-//   &[data-color="success"] {
-//     background-color: theme("colors.success") !important;
-//   }
-
-//   &:disabled {
-//     transform: translateX(0px) translateY(0px) !important;
-//     box-shadow: none !important;
-//     opacity: 0.75 !important;
-//     pointer-events: none !important;
-//   }
-// }
+@import "../../styles/utils.scss";
 
 button.neu-button {
   @include neu-hover-box(1px);
@@ -110,26 +36,7 @@ button.neu-button {
     font-size: 22px;
   }
 
-  // Data Color
-  &[data-color="primary"] {
-    background-color: theme("colors.primary") !important;
-  }
-
-  &[data-color="secondary"] {
-    background-color: theme("colors.secondary") !important;
-  }
-
-  &[data-color="tertiary"] {
-    background-color: theme("colors.tertiary") !important;
-  }
-
-  &[data-color="error"] {
-    background-color: theme("colors.error") !important;
-  }
-
-  &[data-color="success"] {
-    background-color: theme("colors.success") !important;
-  }
+  @include data_color("background-color");
 
   &:disabled {
     opacity: 0.75 !important;

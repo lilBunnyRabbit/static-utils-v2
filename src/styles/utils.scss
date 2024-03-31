@@ -1,0 +1,17 @@
+$colors: (
+  "primary": theme("colors.primary"),
+  "secondary": theme("colors.secondary"),
+  "tertiary": theme("colors.tertiary"),
+  "error": theme("colors.error"),
+  "success": theme("colors.success"),
+);
+
+@mixin data_color($properties...) {
+  @each $name, $color in $colors {
+    &[data-color="#{$name}"] {
+      @for $i from 0 to length($properties) {
+        #{nth($properties, $i + 1)}: $color !important;
+      }
+    }
+  }
+}

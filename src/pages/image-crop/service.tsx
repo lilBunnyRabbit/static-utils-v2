@@ -2,6 +2,7 @@ import { ImageFile } from "@/classes/ImageFile";
 import { useObjectState } from "@/hooks/useObjectState";
 import { drawHollowRect } from "@/utils/canvas.util";
 import React from "react";
+import { flushSync } from "react-dom";
 
 class ImageCropService {
   private canvas: Record<"original" | "crop", HTMLCanvasElement> | null = null;
@@ -22,7 +23,8 @@ class ImageCropService {
   }
 
   static use(imageFile?: ImageFile, settings?: ImageCropService.Settings) {
-    const [output, setOutput] = React.useState<ReturnType<ImageCropService["render"]>>();
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [output, setOutput] = React.useState<Awaited<ReturnType<ImageCropService["render"]>>>();
 
     const { current: service } = React.useRef<ImageCropService>(new ImageCropService());
 
@@ -31,7 +33,8 @@ class ImageCropService {
 
     const render = React.useCallback(
       async (imageFile: ImageFile, settings?: ImageCropService.Settings) => {
-        const output = service.render(imageFile, settings);
+        const output = await service.render(imageFile, settings);
+        setIsLoading(false);
         setOutput(output);
       },
       [service]
@@ -43,7 +46,7 @@ class ImageCropService {
 
     React.useEffect(() => {
       if (!imageFile) return;
-
+      setIsLoading(true);
       render(imageFile, settings);
     }, [render, imageFile, settings]);
 
@@ -55,6 +58,7 @@ class ImageCropService {
       service,
       output,
       render,
+      isLoading,
     };
   }
 
@@ -68,7 +72,7 @@ class ImageCropService {
     return this;
   }
 
-  public render(imageFile: ImageFile, settings: ImageCropService.Settings = {}) {
+  public async render(imageFile: ImageFile, settings: ImageCropService.Settings = {}) {
     this.log();
     if (!this.canvas || !this.ctx) return;
 
@@ -174,6 +178,5 @@ namespace ImageCropService {
     color?: string | CanvasGradient | CanvasPattern;
   }
 }
-
 
 export default ImageCropService;
